@@ -1,0 +1,7 @@
+# 99-keyboard-lock.rules - Allow user session access to keyboard event nodes
+#
+# Option A: Grant access to members of the 'input' group:
+KERNEL=="event*", SUBSYSTEM=="input", GROUP="input", MODE="0660"
+
+# Option B: Grant access to active local desktop seat user via systemd-logind uaccess tag:
+SUBSYSTEM=="input", KERNEL=="event*", ENV{ID_INPUT_KEYBOARD}=="1", TAG+="uaccess"

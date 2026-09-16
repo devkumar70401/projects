@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Health Tracker</string>
+    <string name="accessibility_service_description">Automated Deep Cache Cleaner. Safely cycles through applications to clear residual system cache without requiring root.</string>
+</resources>

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=WarpSync P2P File Share
+Comment=Instant P2P Local File & Text Sharing Application (ShareIt Alternative)
+Exec=/usr/bin/warpsync
+Icon=network-transmit-receive
+Terminal=true
+Type=Application
+Categories=Network;FileTransfer;Utility;
+Keywords=shareit;airdrop;file transfer;p2p;

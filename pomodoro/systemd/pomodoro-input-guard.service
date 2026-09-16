@@ -1,0 +1,29 @@
+[Unit]
+Description=Pomodoro Privileged Input Guard Daemon
+Documentation=man:pomodoro-guard(8)
+After=network.target systemd-udevd.service
+DefaultDependencies=yes
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/pomodoro-guard
+Restart=on-failure
+RestartSec=3s
+TimeoutStopSec=5s
+KillMode=mixed
+StandardOutput=journal
+StandardError=journal
+
+# Security and Sandboxing
+User=root
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/run /tmp
+RuntimeDirectory=pomodoro
+DeviceAllow=char-input rw
+CapabilityBoundingSet=CAP_SYS_ADMIN CAP_DAC_OVERRIDE
+AmbientCapabilities=CAP_SYS_ADMIN CAP_DAC_OVERRIDE
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

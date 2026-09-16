@@ -1,0 +1,515 @@
+/home/dev/SE/Projects/P4_Health_Tracker
+├── android
+│   ├── AndroidManifest.xml
+│   ├── back_result.png
+│   ├── bin
+│   │   ├── classes.dex
+│   │   └── com
+│   │       └── devendra
+│   │           └── healthtracker
+│   │               ├── AlarmAudioService.class
+│   │               ├── AppEngineManager.class
+│   │               ├── AsyncThumbnailLoader$1.class
+│   │               ├── AsyncThumbnailLoader.class
+│   │               ├── BiometricsManager.class
+│   │               ├── BootReceiver.class
+│   │               ├── calculator
+│   │               │   ├── AngleMode$1.class
+│   │               │   ├── AngleMode.class
+│   │               │   ├── ASTNodes$BinaryOpNode.class
+│   │               │   ├── ASTNodes$ExpressionNode.class
+│   │               │   ├── ASTNodes$FunctionCallNode.class
+│   │               │   ├── ASTNodes$NumberNode.class
+│   │               │   ├── ASTNodes$PostfixOpNode.class
+│   │               │   ├── ASTNodes$UnaryOpNode.class
+│   │               │   ├── ASTNodes$VariableNode.class
+│   │               │   ├── ASTNodes.class
+│   │               │   ├── CalculatorCardController$1.class
+│   │               │   ├── CalculatorCardController$2.class
+│   │               │   ├── CalculatorCardController$3.class
+│   │               │   ├── CalculatorCardController$SubMode.class
+│   │               │   ├── CalculatorCardController.class
+│   │               │   ├── CalculatorEngine.class
+│   │               │   ├── CalculatorHistoryManager$HistoryItem.class
+│   │               │   ├── CalculatorHistoryManager.class
+│   │               │   ├── ComplexNumber.class
+│   │               │   ├── DimensionalQuantity.class
+│   │               │   ├── Dimension.class
+│   │               │   ├── EvaluationContext$UserFunction.class
+│   │               │   ├── EvaluationContext.class
+│   │               │   ├── ExpressionLexer.class
+│   │               │   ├── ExpressionParser.class
+│   │               │   ├── ExpressionToken$TokenType.class
+│   │               │   ├── ExpressionToken.class
+│   │               │   ├── InteractiveGraphView$1.class
+│   │               │   ├── InteractiveGraphView.class
+│   │               │   ├── MathContextConfig$1.class
+│   │               │   ├── MathContextConfig$DisplayNotation.class
+│   │               │   ├── MathContextConfig.class
+│   │               │   ├── MatrixEngine$LUDecomposition.class
+│   │               │   ├── MatrixEngine.class
+│   │               │   ├── NumberTheory.class
+│   │               │   ├── PhysicalConstants$ConstantItem.class
+│   │               │   ├── PhysicalConstants.class
+│   │               │   ├── PremiumKeypadButton$1.class
+│   │               │   ├── PremiumKeypadButton$KeyType.class
+│   │               │   ├── PremiumKeypadButton.class
+│   │               │   ├── ProgrammingEngine$BitWidth.class
+│   │               │   ├── ProgrammingEngine$EvaluationResult.class
+│   │               │   ├── ProgrammingEngine.class
+│   │               │   ├── StatisticsEngine.class
+│   │               │   ├── UnitDefinition.class
+│   │               │   ├── UnitRegistry.class
+│   │               │   └── Vector3D.class
+│   │               ├── ChecklistItem.class
+│   │               ├── ChecklistManager.class
+│   │               ├── DailyWellbeingRecord.class
+│   │               ├── DeepCleanAccessibilityService.class
+│   │               ├── DeepCleanManager$AppJunkInfo.class
+│   │               ├── DeepCleanManager$CleaningListener.class
+│   │               ├── DeepCleanManager$JunkOverview.class
+│   │               ├── DeepCleanManager$PurgeReport.class
+│   │               ├── DeepCleanManager.class
+│   │               ├── DeviceTelemetryManager$AppNetworkUsage.class
+│   │               ├── DeviceTelemetryManager$BackgroundAppInfo.class
+│   │               ├── DeviceTelemetryManager$HardwareStats.class
+│   │               ├── DeviceTelemetryManager.class
+│   │               ├── DownloadJob$State.class
+│   │               ├── DownloadJob.class
+│   │               ├── ExtractedMedia.class
+│   │               ├── features
+│   │               │   ├── FeatureIconDrawer.class
+│   │               │   ├── FeatureItem.class
+│   │               │   ├── FeatureOrderManager.class
+│   │               │   ├── FeatureRegistry.class
+│   │               │   ├── FeatureTileView$OnTileClickListener.class
+│   │               │   ├── FeatureTileView$OnTileLongClickListener.class
+│   │               │   ├── FeatureTileView.class
+│   │               │   ├── ReorderableFeatureGrid$1.class
+│   │               │   ├── ReorderableFeatureGrid$OnFeatureSelectedListener.class
+│   │               │   ├── ReorderableFeatureGrid$OnOrderChangeListener.class
+│   │               │   └── ReorderableFeatureGrid.class
+│   │               ├── InstagramExtractorEngine.class
+│   │               ├── MainActivity$1.class
+│   │               ├── MainActivity$2.class
+│   │               ├── MainActivity$3.class
+│   │               ├── MainActivity$4.class
+│   │               ├── MainActivity$5.class
+│   │               ├── MainActivity$6.class
+│   │               ├── MainActivity$7.class
+│   │               ├── MainActivity.class
+│   │               ├── MediaDownloadManager$DownloadQueueListener.class
+│   │               ├── MediaDownloadManager.class
+│   │               ├── MediaDownloadService.class
+│   │               ├── MediaResolverRegistry$1.class
+│   │               ├── MediaResolverRegistry.class
+│   │               ├── MediaSource.class
+│   │               ├── MediaStoreExporter.class
+│   │               ├── ModernToggleSwitch$OnCheckedChangeListener.class
+│   │               ├── ModernToggleSwitch.class
+│   │               ├── NativeMediaMuxer$MuxingProgressListener.class
+│   │               ├── NativeMediaMuxer.class
+│   │               ├── PomodoroManager$OnPomodoroUpdateListener.class
+│   │               ├── PomodoroManager.class
+│   │               ├── PomodoroReceiver.class
+│   │               ├── PomodoroService$1.class
+│   │               ├── PomodoroService.class
+│   │               ├── PomodoroWidgetProvider.class
+│   │               ├── R$color.class
+│   │               ├── R$drawable.class
+│   │               ├── R$id.class
+│   │               ├── R$layout.class
+│   │               ├── R$mipmap.class
+│   │               ├── R$raw.class
+│   │               ├── R$string.class
+│   │               ├── R$xml.class
+│   │               ├── R.class
+│   │               ├── ReminderReceiver.class
+│   │               ├── ScheduleManager$Phase.class
+│   │               ├── ScheduleManager$PhaseTemplate.class
+│   │               ├── ScheduleManager.class
+│   │               ├── SnapHorizontalScrollView$OnPageChangeListener.class
+│   │               ├── SnapHorizontalScrollView.class
+│   │               ├── SoundManager.class
+│   │               ├── StreamFormat.class
+│   │               ├── theme
+│   │               │   ├── ThemeManager.class
+│   │               │   ├── ThemeToggleView$OnThemeChangeListener.class
+│   │               │   └── ThemeToggleView.class
+│   │               ├── ui
+│   │               │   ├── components
+│   │               │   │   ├── PremiumButton$1.class
+│   │               │   │   ├── PremiumButton$Style.class
+│   │               │   │   ├── PremiumButton.class
+│   │               │   │   ├── PremiumCard.class
+│   │               │   │   ├── PremiumCheckbox$OnCheckedChangeListener.class
+│   │               │   │   ├── PremiumCheckbox.class
+│   │               │   │   ├── PremiumChip.class
+│   │               │   │   ├── PremiumIconButton.class
+│   │               │   │   ├── PremiumSegmentedControl$OnSegmentSelectedListener.class
+│   │               │   │   ├── PremiumSegmentedControl.class
+│   │               │   │   ├── PremiumStepper$OnStepperActionListener.class
+│   │               │   │   └── PremiumStepper.class
+│   │               │   └── design
+│   │               │       ├── DesignTokens.class
+│   │               │       └── TouchFeedback.class
+│   │               ├── UniversalWebExtractor.class
+│   │               ├── WellbeingHistoryManager.class
+│   │               ├── WellbeingManager$AppUsageInfo.class
+│   │               ├── WellbeingManager.class
+│   │               ├── WhatsAppStatusHarvester$StatusItem.class
+│   │               ├── WhatsAppStatusHarvester.class
+│   │               ├── YouTubeExtractorEngine$WebPageInfo.class
+│   │               └── YouTubeExtractorEngine.class
+│   ├── build_apk.sh
+│   ├── compiled_res.zip
+│   ├── dark_downloader.png
+│   ├── dark_mode_screen.png
+│   ├── dark_routine.png
+│   ├── debug.keystore
+│   ├── dist
+│   │   ├── HealthTracker.apk
+│   │   └── HealthTracker.apk.idsig
+│   ├── res
+│   │   ├── drawable
+│   │   │   ├── app_logo.png
+│   │   │   ├── ic_launcher.png
+│   │   │   ├── widget_badge_bg.xml
+│   │   │   ├── widget_bg.xml
+│   │   │   ├── widget_btn_primary.xml
+│   │   │   └── widget_btn_secondary.xml
+│   │   ├── drawable-hdpi
+│   │   │   └── ic_launcher.png
+│   │   ├── drawable-mdpi
+│   │   │   └── ic_launcher.png
+│   │   ├── drawable-xhdpi
+│   │   │   └── ic_launcher.png
+│   │   ├── drawable-xxhdpi
+│   │   │   └── ic_launcher.png
+│   │   ├── drawable-xxxhdpi
+│   │   │   └── ic_launcher.png
+│   │   ├── layout
+│   │   │   └── widget_pomodoro.xml
+│   │   ├── mipmap-anydpi-v26
+│   │   │   ├── ic_launcher_round.xml
+│   │   │   └── ic_launcher.xml
+│   │   ├── mipmap-hdpi
+│   │   │   ├── ic_launcher_foreground.png
+│   │   │   ├── ic_launcher.png
+│   │   │   └── ic_launcher_round.png
+│   │   ├── mipmap-mdpi
+│   │   │   ├── ic_launcher_foreground.png
+│   │   │   ├── ic_launcher.png
+│   │   │   └── ic_launcher_round.png
+│   │   ├── mipmap-xhdpi
+│   │   │   ├── ic_launcher_foreground.png
+│   │   │   ├── ic_launcher.png
+│   │   │   └── ic_launcher_round.png
+│   │   ├── mipmap-xxhdpi
+│   │   │   ├── ic_launcher_foreground.png
+│   │   │   ├── ic_launcher.png
+│   │   │   └── ic_launcher_round.png
+│   │   ├── mipmap-xxxhdpi
+│   │   │   ├── ic_launcher_foreground.png
+│   │   │   ├── ic_launcher.png
+│   │   │   └── ic_launcher_round.png
+│   │   ├── raw
+│   │   │   └── summertime_sadness.mp3
+│   │   ├── values
+│   │   │   ├── colors.xml
+│   │   │   └── strings.xml
+│   │   └── xml
+│   │       ├── deep_clean_accessibility_service.xml
+│   │       └── pomodoro_widget_info.xml
+│   ├── src
+│   │   └── com
+│   │       └── devendra
+│   │           └── healthtracker
+│   │               ├── AlarmAudioService.java
+│   │               ├── AppEngineManager.java
+│   │               ├── AsyncThumbnailLoader.java
+│   │               ├── BiometricsManager.java
+│   │               ├── BootReceiver.java
+│   │               ├── calculator
+│   │               │   ├── AngleMode.java
+│   │               │   ├── ASTNodes.java
+│   │               │   ├── CalculatorCardController.java
+│   │               │   ├── CalculatorEngine.java
+│   │               │   ├── CalculatorHistoryManager.java
+│   │               │   ├── ComplexNumber.java
+│   │               │   ├── DimensionalQuantity.java
+│   │               │   ├── Dimension.java
+│   │               │   ├── EvaluationContext.java
+│   │               │   ├── ExpressionLexer.java
+│   │               │   ├── ExpressionParser.java
+│   │               │   ├── ExpressionToken.java
+│   │               │   ├── InteractiveGraphView.java
+│   │               │   ├── MathContextConfig.java
+│   │               │   ├── MatrixEngine.java
+│   │               │   ├── NumberTheory.java
+│   │               │   ├── PhysicalConstants.java
+│   │               │   ├── PremiumKeypadButton.java
+│   │               │   ├── ProgrammingEngine.java
+│   │               │   ├── StatisticsEngine.java
+│   │               │   ├── UnitDefinition.java
+│   │               │   ├── UnitRegistry.java
+│   │               │   └── Vector3D.java
+│   │               ├── ChecklistItem.java
+│   │               ├── ChecklistManager.java
+│   │               ├── DailyWellbeingRecord.java
+│   │               ├── DeepCleanAccessibilityService.java
+│   │               ├── DeepCleanManager.java
+│   │               ├── DeviceTelemetryManager.java
+│   │               ├── DownloadJob.java
+│   │               ├── ExtractedMedia.java
+│   │               ├── features
+│   │               │   ├── FeatureIconDrawer.java
+│   │               │   ├── FeatureItem.java
+│   │               │   ├── FeatureOrderManager.java
+│   │               │   ├── FeatureRegistry.java
+│   │               │   ├── FeatureTileView.java
+│   │               │   └── ReorderableFeatureGrid.java
+│   │               ├── InstagramExtractorEngine.java
+│   │               ├── MainActivity.java
+│   │               ├── MediaDownloadManager.java
+│   │               ├── MediaDownloadService.java
+│   │               ├── MediaResolverRegistry.java
+│   │               ├── MediaSource.java
+│   │               ├── MediaStoreExporter.java
+│   │               ├── ModernToggleSwitch.java
+│   │               ├── NativeMediaMuxer.java
+│   │               ├── PomodoroManager.java
+│   │               ├── PomodoroReceiver.java
+│   │               ├── PomodoroService.java
+│   │               ├── PomodoroWidgetProvider.java
+│   │               ├── ReminderReceiver.java
+│   │               ├── R.java
+│   │               ├── ScheduleManager.java
+│   │               ├── SnapHorizontalScrollView.java
+│   │               ├── SoundManager.java
+│   │               ├── StreamFormat.java
+│   │               ├── theme
+│   │               │   ├── ThemeManager.java
+│   │               │   └── ThemeToggleView.java
+│   │               ├── ui
+│   │               │   ├── components
+│   │               │   │   ├── PremiumButton.java
+│   │               │   │   ├── PremiumCard.java
+│   │               │   │   ├── PremiumCheckbox.java
+│   │               │   │   ├── PremiumChip.java
+│   │               │   │   ├── PremiumIconButton.java
+│   │               │   │   ├── PremiumSegmentedControl.java
+│   │               │   │   └── PremiumStepper.java
+│   │               │   └── design
+│   │               │       ├── DesignTokens.java
+│   │               │       └── TouchFeedback.java
+│   │               ├── UniversalWebExtractor.java
+│   │               ├── WellbeingHistoryManager.java
+│   │               ├── WellbeingManager.java
+│   │               ├── WhatsAppStatusHarvester.java
+│   │               └── YouTubeExtractorEngine.java
+│   ├── swap_done.png
+│   ├── swap_result.png
+│   ├── tests
+│   │   ├── AppEngineTest.java
+│   │   ├── bin
+│   │   │   └── com
+│   │   │       └── devendra
+│   │   │           └── healthtracker
+│   │   │               ├── AlarmAudioService.class
+│   │   │               ├── AppEngineManager.class
+│   │   │               ├── AsyncThumbnailLoader$1.class
+│   │   │               ├── AsyncThumbnailLoader.class
+│   │   │               ├── BiometricsManager.class
+│   │   │               ├── calculator
+│   │   │               │   ├── AngleMode$1.class
+│   │   │               │   ├── AngleMode.class
+│   │   │               │   ├── ASTNodes$BinaryOpNode.class
+│   │   │               │   ├── ASTNodes$ExpressionNode.class
+│   │   │               │   ├── ASTNodes$FunctionCallNode.class
+│   │   │               │   ├── ASTNodes$NumberNode.class
+│   │   │               │   ├── ASTNodes$PostfixOpNode.class
+│   │   │               │   ├── ASTNodes$UnaryOpNode.class
+│   │   │               │   ├── ASTNodes$VariableNode.class
+│   │   │               │   ├── ASTNodes.class
+│   │   │               │   ├── CalculatorCardController$1.class
+│   │   │               │   ├── CalculatorCardController$2.class
+│   │   │               │   ├── CalculatorCardController$3.class
+│   │   │               │   ├── CalculatorCardController$SubMode.class
+│   │   │               │   ├── CalculatorCardController.class
+│   │   │               │   ├── CalculatorEngine.class
+│   │   │               │   ├── CalculatorHistoryManager$HistoryItem.class
+│   │   │               │   ├── CalculatorHistoryManager.class
+│   │   │               │   ├── ComplexNumber.class
+│   │   │               │   ├── DimensionalQuantity.class
+│   │   │               │   ├── Dimension.class
+│   │   │               │   ├── EvaluationContext$UserFunction.class
+│   │   │               │   ├── EvaluationContext.class
+│   │   │               │   ├── ExpressionLexer.class
+│   │   │               │   ├── ExpressionParser.class
+│   │   │               │   ├── ExpressionToken$TokenType.class
+│   │   │               │   ├── ExpressionToken.class
+│   │   │               │   ├── InteractiveGraphView$1.class
+│   │   │               │   ├── InteractiveGraphView.class
+│   │   │               │   ├── MathContextConfig$1.class
+│   │   │               │   ├── MathContextConfig$DisplayNotation.class
+│   │   │               │   ├── MathContextConfig.class
+│   │   │               │   ├── MatrixEngine$LUDecomposition.class
+│   │   │               │   ├── MatrixEngine.class
+│   │   │               │   ├── NumberTheory.class
+│   │   │               │   ├── PhysicalConstants$ConstantItem.class
+│   │   │               │   ├── PhysicalConstants.class
+│   │   │               │   ├── PremiumKeypadButton$1.class
+│   │   │               │   ├── PremiumKeypadButton$KeyType.class
+│   │   │               │   ├── PremiumKeypadButton.class
+│   │   │               │   ├── ProgrammingEngine$BitWidth.class
+│   │   │               │   ├── ProgrammingEngine$EvaluationResult.class
+│   │   │               │   ├── ProgrammingEngine.class
+│   │   │               │   ├── StatisticsEngine.class
+│   │   │               │   ├── UnitDefinition.class
+│   │   │               │   ├── UnitRegistry.class
+│   │   │               │   └── Vector3D.class
+│   │   │               ├── ChecklistItem.class
+│   │   │               ├── ChecklistManager.class
+│   │   │               ├── DailyWellbeingRecord.class
+│   │   │               ├── DeepCleanAccessibilityService.class
+│   │   │               ├── DeepCleanManager$AppJunkInfo.class
+│   │   │               ├── DeepCleanManager$CleaningListener.class
+│   │   │               ├── DeepCleanManager$JunkOverview.class
+│   │   │               ├── DeepCleanManager$PurgeReport.class
+│   │   │               ├── DeepCleanManager.class
+│   │   │               ├── DeviceTelemetryManager$AppNetworkUsage.class
+│   │   │               ├── DeviceTelemetryManager$BackgroundAppInfo.class
+│   │   │               ├── DeviceTelemetryManager$HardwareStats.class
+│   │   │               ├── DeviceTelemetryManager.class
+│   │   │               ├── DownloadJob$State.class
+│   │   │               ├── DownloadJob.class
+│   │   │               ├── ExtractedMedia.class
+│   │   │               ├── features
+│   │   │               │   ├── FeatureIconDrawer.class
+│   │   │               │   ├── FeatureItem.class
+│   │   │               │   ├── FeatureOrderManager.class
+│   │   │               │   ├── FeatureRegistry.class
+│   │   │               │   ├── FeatureTileView$OnTileClickListener.class
+│   │   │               │   ├── FeatureTileView$OnTileLongClickListener.class
+│   │   │               │   ├── FeatureTileView.class
+│   │   │               │   ├── ReorderableFeatureGrid$1.class
+│   │   │               │   ├── ReorderableFeatureGrid$2.class
+│   │   │               │   ├── ReorderableFeatureGrid$3.class
+│   │   │               │   ├── ReorderableFeatureGrid$OnFeatureSelectedListener.class
+│   │   │               │   ├── ReorderableFeatureGrid$OnOrderChangeListener.class
+│   │   │               │   └── ReorderableFeatureGrid.class
+│   │   │               ├── InstagramExtractorEngine.class
+│   │   │               ├── MainActivity$1.class
+│   │   │               ├── MainActivity$2.class
+│   │   │               ├── MainActivity$3.class
+│   │   │               ├── MainActivity$4.class
+│   │   │               ├── MainActivity$5.class
+│   │   │               ├── MainActivity$6.class
+│   │   │               ├── MainActivity$7.class
+│   │   │               ├── MainActivity.class
+│   │   │               ├── MediaDownloadManager$DownloadQueueListener.class
+│   │   │               ├── MediaDownloadManager.class
+│   │   │               ├── MediaDownloadService.class
+│   │   │               ├── MediaResolverRegistry$1.class
+│   │   │               ├── MediaResolverRegistry.class
+│   │   │               ├── MediaSource.class
+│   │   │               ├── MediaStoreExporter.class
+│   │   │               ├── ModernToggleSwitch$OnCheckedChangeListener.class
+│   │   │               ├── ModernToggleSwitch.class
+│   │   │               ├── NativeMediaMuxer$MuxingProgressListener.class
+│   │   │               ├── NativeMediaMuxer.class
+│   │   │               ├── PomodoroManager$OnPomodoroUpdateListener.class
+│   │   │               ├── PomodoroManager.class
+│   │   │               ├── PomodoroReceiver.class
+│   │   │               ├── PomodoroService$1.class
+│   │   │               ├── PomodoroService.class
+│   │   │               ├── PomodoroWidgetProvider.class
+│   │   │               ├── R$color.class
+│   │   │               ├── R$drawable.class
+│   │   │               ├── R$id.class
+│   │   │               ├── R$layout.class
+│   │   │               ├── R$mipmap.class
+│   │   │               ├── R$raw.class
+│   │   │               ├── R$string.class
+│   │   │               ├── R$xml.class
+│   │   │               ├── R.class
+│   │   │               ├── ReminderReceiver.class
+│   │   │               ├── ScheduleManager$Phase.class
+│   │   │               ├── ScheduleManager$PhaseTemplate.class
+│   │   │               ├── ScheduleManager.class
+│   │   │               ├── SnapHorizontalScrollView$OnPageChangeListener.class
+│   │   │               ├── SnapHorizontalScrollView.class
+│   │   │               ├── SoundManager.class
+│   │   │               ├── StreamFormat.class
+│   │   │               ├── tests
+│   │   │               │   ├── AppEngineTest$MockAppEngineManager.class
+│   │   │               │   ├── AppEngineTest.class
+│   │   │               │   ├── CalculatorEngineTest.class
+│   │   │               │   ├── ChecklistManagerTest$TestChecklistItem.class
+│   │   │               │   ├── ChecklistManagerTest$TestChecklistManager.class
+│   │   │               │   ├── ChecklistManagerTest.class
+│   │   │               │   ├── DeepCleanManagerTest.class
+│   │   │               │   ├── DeviceTelemetryTest.class
+│   │   │               │   ├── FeatureOrderManagerTest$TestOrderValidator.class
+│   │   │               │   ├── FeatureOrderManagerTest.class
+│   │   │               │   ├── MediaDownloaderEngineTest.class
+│   │   │               │   ├── PomodoroStateTest$Phase.class
+│   │   │               │   ├── PomodoroStateTest$PomodoroStateMachine.class
+│   │   │               │   ├── PomodoroStateTest$Status.class
+│   │   │               │   ├── PomodoroStateTest.class
+│   │   │               │   ├── RunAllTests.class
+│   │   │               │   ├── ScheduleManagerTest.class
+│   │   │               │   ├── ThemeManagerTest.class
+│   │   │               │   ├── WellbeingHistoryTest$TestWellbeingHistoryEngine.class
+│   │   │               │   ├── WellbeingHistoryTest$TestWellbeingRecord.class
+│   │   │               │   └── WellbeingHistoryTest.class
+│   │   │               ├── theme
+│   │   │               │   ├── ThemeManager.class
+│   │   │               │   ├── ThemeToggleView$OnThemeChangeListener.class
+│   │   │               │   └── ThemeToggleView.class
+│   │   │               ├── ui
+│   │   │               │   ├── components
+│   │   │               │   │   ├── PremiumButton$1.class
+│   │   │               │   │   ├── PremiumButton$Style.class
+│   │   │               │   │   ├── PremiumButton.class
+│   │   │               │   │   ├── PremiumCard.class
+│   │   │               │   │   ├── PremiumCheckbox$OnCheckedChangeListener.class
+│   │   │               │   │   ├── PremiumCheckbox.class
+│   │   │               │   │   ├── PremiumChip.class
+│   │   │               │   │   ├── PremiumIconButton.class
+│   │   │               │   │   ├── PremiumSegmentedControl$OnSegmentSelectedListener.class
+│   │   │               │   │   ├── PremiumSegmentedControl.class
+│   │   │               │   │   ├── PremiumStepper$OnStepperActionListener.class
+│   │   │               │   │   └── PremiumStepper.class
+│   │   │               │   └── design
+│   │   │               │       ├── DesignTokens.class
+│   │   │               │       └── TouchFeedback.class
+│   │   │               ├── UniversalWebExtractor.class
+│   │   │               ├── WellbeingHistoryManager.class
+│   │   │               ├── WellbeingManager$AppUsageInfo.class
+│   │   │               ├── WellbeingManager.class
+│   │   │               ├── WhatsAppStatusHarvester$StatusItem.class
+│   │   │               ├── WhatsAppStatusHarvester.class
+│   │   │               ├── YouTubeExtractorEngine$WebPageInfo.class
+│   │   │               └── YouTubeExtractorEngine.class
+│   │   ├── CalculatorEngineTest.java
+│   │   ├── ChecklistManagerTest.java
+│   │   ├── DeepCleanManagerTest.java
+│   │   ├── DeviceTelemetryTest.java
+│   │   ├── FeatureOrderManagerTest.java
+│   │   ├── MediaDownloaderEngineTest.java
+│   │   ├── PomodoroStateTest.java
+│   │   ├── RunAllTests.java
+│   │   ├── run_tests.sh
+│   │   ├── ScheduleManagerTest.java
+│   │   ├── ThemeManagerTest.java
+│   │   └── WellbeingHistoryTest.java
+│   └── unaligned.apk
+├── DECODER.md
+├── README.md
+├── SCHEDULE.md
+├── SCHEDULE.pdf
+└── schedule.toml
+
+52 directories, 461 files

@@ -1,0 +1,16 @@
+[Unit]
+Description=Keyboard-Only Lock System Daemon
+Documentation=https://github.com/dev/keyboard-lock
+After=local-fs.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/keyboard-lock --verbose
+ExecStop=/usr/local/bin/keyboard-lock --stop
+Restart=on-failure
+RestartSec=2
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

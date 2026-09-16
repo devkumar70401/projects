@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="14dp"
+    android:background="@drawable/widget_bg">
+
+    <!-- Top Header: Logo, Title & State Badge -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/app_logo"
+            android:contentDescription="Rose Logo" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:text="ROSE FOCUS"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="#0F172A" />
+
+        <TextView
+            android:id="@+id/widget_phase_badge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:text="FOCUS"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:textColor="#E11D48"
+            android:background="@drawable/widget_badge_bg" />
+    </LinearLayout>
+
+    <!-- Center: Countdown Display & Session Counter -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp">
+
+        <TextView
+            android:id="@+id/widget_timer_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="25:00"
+            android:textSize="36sp"
+            android:textStyle="bold"
+            android:textColor="#0F172A"
+            android:letterSpacing="0.05" />
+
+        <TextView
+            android:id="@+id/widget_session_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="Session 1 / 4 · 🍅 ⚪ ⚪ ⚪"
+            android:textSize="11sp"
+            android:textColor="#64748B" />
+
+        <ProgressBar
+            android:id="@+id/widget_progress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_marginTop="6dp"
+            android:max="100"
+            android:progress="0"
+            android:progressTint="#E11D48" />
+    </LinearLayout>
+
+    <!-- Bottom Controls Row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/widget_btn_toggle"
+            android:layout_width="0dp"
+            android:layout_height="38dp"
+            android:layout_weight="1.2"
+            android:text="▶ Start"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/widget_btn_primary" />
+
+        <Button
+            android:id="@+id/widget_btn_reset"
+            android:layout_width="0dp"
+            android:layout_height="38dp"
+            android:layout_weight="0.9"
+            android:layout_marginStart="6dp"
+            android:text="↺ Reset"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:textColor="#334155"
+            android:background="@drawable/widget_btn_secondary" />
+
+        <Button
+            android:id="@+id/widget_btn_skip"
+            android:layout_width="0dp"
+            android:layout_height="38dp"
+            android:layout_weight="0.9"
+            android:layout_marginStart="6dp"
+            android:text="⏭ Skip"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:textColor="#334155"
+            android:background="@drawable/widget_btn_secondary" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,15 @@
+[Unit]
+Description=Pomodoro User Session Controller & Overlay
+Documentation=man:pomodoro-ui(1)
+After=graphical-session.target pomodoro-input-guard.service
+PartOf=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/pomodoro-ui
+Restart=on-failure
+RestartSec=5s
+Environment=RUST_LOG=pomodoro_ui=info,pomodoro_core=info
+
+[Install]
+WantedBy=graphical-session.target

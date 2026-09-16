@@ -1,0 +1,14 @@
+[Unit]
+Description=WarpSync Local Peer-to-Peer File Sharing Service
+After=network.target
+
+[Service]
+Type=simple
+User=dev
+WorkingDirectory=/home/dev/SE/P2_Warpsync
+ExecStart=/home/dev/SE/P2_Warpsync/.venv/bin/python /home/dev/SE/P2_Warpsync/start.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

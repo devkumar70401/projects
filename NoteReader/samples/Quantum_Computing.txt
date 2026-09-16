@@ -1,0 +1,20 @@
+Quantum Computing Fundamentals
+
+1. Quantum Bits (Qubits)
+Unlike classical bits which can exist in a definite state of 0 or 1, a quantum bit (qubit) can exist in a superposition of both states |0> and |1>.
+Mathematically, a pure qubit state can be written as a linear combination:
+|psi> = alpha|0> + beta|1>
+where alpha and beta are complex probability amplitudes such that |alpha|^2 + |beta|^2 = 1.
+
+2. Quantum Superposition
+Superposition allows a quantum computer to evaluate many possible combinations simultaneously. When measured, however, the superposition collapses into one of the basis states with probability proportional to the square of its amplitude.
+
+3. Quantum Entanglement
+Entanglement is a phenomenon where quantum particles become inextricably linked, such that the state of one instantly correlates with the state of another, regardless of distance.
+Einstein famously described this as "spooky action at a distance".
+
+4. Applications
+- Cryptography (Shor's Algorithm for prime factorization)
+- Database Search (Grover's Algorithm with quadratic speedup)
+- Quantum Chemistry and Drug Discovery
+- Financial Modeling and Optimization Algorithms

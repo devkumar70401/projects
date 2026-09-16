@@ -1,0 +1,11 @@
+Package: warpsync
+Version: 2.0.0
+Architecture: amd64
+Maintainer: Devendra Kumar <devkumar70401@gmail.com>
+Section: net
+Priority: optional
+Depends: python3, python3-fastapi, python3-uvicorn, python3-qrcode, python3-jinja2, python3-pil
+Description: Instant P2P Local File & Text Sharing Application
+ WarpSync is a high-speed, zero-trust local peer-to-peer file and clipboard
+ text sharing application. Features WebSockets signaling, Web Crypto AES-256
+ encryption, public HTTPS hotspot tunneling, and modern glassmorphism UI.

@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-inter: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-literata: 'Literata', Georgia, serif;
+    --font-ibm: 'IBM Plex Sans', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+}
+
+.font-inter {
+  font-family: var(--font-inter);
+}
+
+.font-literata {
+  font-family: var(--font-literata);
+}
+
+.font-ibm {
+  font-family: var(--font-ibm);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* 3D Book spine shadow effect */
+.spine-shadow {
+  background: linear-gradient(to right, rgba(0,0,0,0.22) 0%, rgba(0,0,0,0.06) 8px, rgba(0,0,0,0) 18px);
+}
+
+.spine-shadow-right {
+  background: linear-gradient(to left, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0) 8px);
+}
+
+/* Custom Matte Paper Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #dadad8;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #c1c8c5;
+}
+
+/* Reading environment selection styling */
+.theme-light ::selection {
+  background-color: #b5eedd;
+  color: #386e60;
+}
+
+.theme-sepia ::selection {
+  background-color: #E3D5B1;
+  color: #3D3828;
+}
+
+.theme-dark ::selection {
+  background-color: #3e6259;
+  color: #ffffff;
+}
+
+/* Code cell styling */
+.token-keyword {
+  color: #5f3a32;
+  font-weight: 600;
+}
+
+.token-string {
+  color: #264a42;
+}
+
+.token-number {
+  color: #31685a;
+}
+
+.token-operator {
+  color: #717976;
+}
+
+.token-comment {
+  color: #949c99;
+  font-style: italic;
+}
+
+.token-function {
+  color: #386e60;
+}
+

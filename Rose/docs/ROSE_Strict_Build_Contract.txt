@@ -1,0 +1,187 @@
+================================================================================
+ROSE — STRICT BUILD CONTRACT (v0.1 TIMER MILESTONE ONLY)
+This document supersedes nothing in the original architecture spec. It adds
+HARD CONSTRAINTS and a MANDATORY BUILD ORDER because a previous attempt
+violated the philosophy and produced a system that never worked.
+================================================================================
+
+
+0. WHY THIS DOCUMENT EXISTS
+--------------------------------------------------------------------------------
+A previous implementation attempt (in Python) technically followed the
+event-bus shape of the architecture, but violated almost every other rule:
+it used the wrong language, merged multiple responsibilities into single
+"bricks", added enormous unrequested scope (neural STT, DSP filtering,
+background daemon, desktop notifications, hardcoded hardware device IDs),
+and was never verified piece-by-piece. The result never worked, even after
+many edits, because there were too many entangled, unverified parts failing
+at once with no way to isolate which one was broken.
+
+This document exists to make it IMPOSSIBLE to repeat that outcome. Read
+Section 1 (hard rules) before writing a single line of code. If any
+instruction elsewhere conflicts with Section 1, Section 1 wins.
+
+
+1. HARD CONSTRAINTS — NON-NEGOTIABLE
+--------------------------------------------------------------------------------
+1.1 LANGUAGE: C ONLY.
+    - No Python, no ctypes-from-Python, no asyncio, no ANY interpreted
+      language anywhere in the runtime path. If a tool must be scripted
+      (e.g. a build helper), bash is acceptable for that ONLY — never for
+      the running system itself.
+
+1.2 NO SCOPE BEYOND THIS LIST. The ONLY features allowed in v0.1 are:
+    - Continuous microphone listening.
+    - Speech-to-text of whatever is heard.
+    - Detecting the literal word "rose" (case-insensitive) in the text.
+    - Detecting the phrase pattern "start timer of <number> <unit>"
+      where unit is minutes, seconds, or hours.
+    - Counting down that duration.
+    - Playing an audible tone when the countdown reaches zero.
+    That is the ENTIRE feature set. Do not add:
+      * background daemon / PID files / CLI process manager
+      * desktop notifications (notify-send or equivalent)
+      * noise filtering, bandpass filters, EMA noise floors
+      * "two-stage wake window" or any conversational state beyond a
+        single command per wake word
+      * hardcoded audio device names, MAC addresses, or paths
+      * stop/cancel/status commands
+      * multiple simultaneous timers
+      * any configuration system beyond a few #define constants
+    If it is not in the bullet list above, it does not get built in v0.1.
+    Anything else is a FUTURE milestone, not this one.
+
+1.3 ONE BRICK, ONE JOB, NO EXCEPTIONS.
+    Before writing any .c file, write ONE sentence describing what it does.
+    If that sentence contains the word "and" joining two different actions,
+    it is two bricks. Split it before writing code.
+    Example of a VIOLATION from the previous attempt: a module that both
+    applies a bandpass filter AND computes RMS energy. That is two bricks.
+
+1.4 NO BRICK MAY INCLUDE ANOTHER BRICK'S HEADER FOR FUNCTIONAL CALLS.
+    Communication happens only through the event bus (publish/subscribe),
+    using the shared event struct definitions. This was correctly followed
+    in the previous attempt's design on paper — it must also be followed
+    in the actual .c files, with no "just this once" direct calls.
+
+1.5 NO HARDCODED ENVIRONMENT ASSUMPTIONS.
+    No literal device names (e.g. "alsa_input.pci-..."), no MAC addresses,
+    no absolute paths outside the project folder. Use the system default
+    audio device unless a brick is specifically built (later, not in v0.1)
+    to enumerate and select devices generically.
+
+1.6 SIMPLEST POSSIBLE IMPLEMENTATION AT EVERY STEP.
+    When two implementation options exist, choose the simpler, smaller,
+    more deterministic one — even if it is less accurate or less
+    "impressive." A crude wake-word string match that works is better than
+    a clever probabilistic system that doesn't. Accuracy improvements are
+    a FUTURE milestone.
+
+
+2. MANDATORY BUILD ORDER — DO NOT SKIP OR REORDER STEPS
+--------------------------------------------------------------------------------
+Each step must be built, compiled, and MANUALLY VERIFIED WORKING before
+the next step begins. Do not write step 3's code while step 2 is still
+unverified. This is the single biggest fix over the previous attempt,
+which built everything at once and could not isolate failures.
+
+STEP 1 — Tone Player Brick (build this FIRST, in isolation)
+    Goal: a standalone C program that plays an audible tone and exits.
+    Verify: you personally hear the tone when you run the binary.
+    Do not proceed until this works with zero ambiguity.
+
+STEP 2 — Countdown Engine Brick (standalone, no audio/mic involved)
+    Goal: a standalone C program that takes a hardcoded duration (e.g. 5
+    seconds, for fast testing), counts down using CLOCK_MONOTONIC, and
+    calls Step 1's tone-playing code directly when it hits zero.
+    Verify: run it, wait 5 seconds, confirm the tone plays at the right time.
+
+STEP 3 — Duration Parser Brick (pure function, no I/O)
+    Goal: a function that takes a string like "10 minutes" or "30 seconds"
+    and returns an integer number of seconds. Write 5-10 manual test cases
+    in a small test file and confirm all pass before moving on.
+
+STEP 4 — Wire Steps 1-3 into the Timer Subsystem via the Event Bus
+    Goal: build the minimal event bus (publish/subscribe) FIRST as its own
+    verified brick (test it with two dummy events before connecting
+    anything real to it). THEN connect: a manual test trigger (e.g. typing
+    a duration into stdin) -> Duration Parser -> EVENT_TIMER_START_REQUESTED
+    -> Countdown Engine -> EVENT_TIMER_COMPLETED -> Tone Player.
+    Verify: typing "10 minutes" at a prompt correctly starts a real
+    countdown and rings after the correct time. NO MICROPHONE YET.
+    This proves the entire Timer Subsystem works before voice is added.
+
+STEP 5 — Audio Capture Brick (standalone, verify raw capture only)
+    Goal: continuously read microphone audio and print a simple VU-meter
+    style value (e.g. volume level) to the terminal. No transcription yet.
+    Verify: speak into the mic, confirm the printed values react to your
+    voice. This isolates "is the microphone working at all" from every
+    later step.
+    Library: PortAudio (preferred for stability/simplicity) using the
+    system default input device — no hardcoded device names.
+
+STEP 6 — Transcription Brick (standalone, verify text output only)
+    Goal: feed captured audio into an offline speech-to-text engine and
+    print whatever text it recognizes to the terminal. Nothing else.
+    Verify: speak a few test sentences, confirm reasonably correct text
+    appears. Accuracy does not need to be perfect — it needs to be
+    SOMETHING you can visibly test happened.
+    Library: Vosk has an official C API (libvosk + vosk_api.h) — use it
+    directly from C. Do not reach for a Python bridge under any
+    circumstance. Use the smallest available English model.
+
+STEP 7 — Wake-Word Brick (standalone, verify detection only)
+    Goal: take the text stream from Step 6 and print "WAKE WORD DETECTED"
+    whenever "rose" (case-insensitive) appears.
+    Verify: say "Rose" out loud several times, confirm each is caught, and
+    confirm normal speech without "Rose" does NOT falsely trigger it.
+
+STEP 8 — Command Router Brick (standalone, verify parsing only)
+    Goal: take text that follows a detected wake word and check it against
+    the single supported pattern: "start timer of <number> <unit>".
+    Print the extracted number and unit if matched, print "NO MATCH"
+    otherwise.
+    Verify: test with your own voice saying several phrasings.
+
+STEP 9 — FULL INTEGRATION
+    Only after Steps 1-8 are each individually verified working, wire them
+    all together through the event bus exactly as described in the
+    original architecture document (Section 7, "Data Flow"). Do not
+    introduce anything new at this step — it is pure wiring, not new logic.
+    Verify: say "Rose, start timer of 10 minutes" and confirm the entire
+    chain works end to end, exactly as designed.
+
+
+3. DEFINITION OF DONE FOR v0.1
+--------------------------------------------------------------------------------
+v0.1 is complete when, and only when:
+    - A single C binary runs continuously.
+    - Saying "Rose, start timer of <N> <unit>" out loud reliably starts a
+      real countdown of the correct duration.
+    - A tone plays audibly when that countdown reaches zero.
+    - The system keeps running and can be triggered again afterward.
+    - No feature outside Section 1.2's list exists anywhere in the code.
+If any of the above is not true, v0.1 is not done — do not add new
+features to a broken foundation. Fix the foundation first.
+
+
+4. RULES FOR THE AI ASSISTANT BUILDING THIS (Gemini, Claude, or otherwise)
+--------------------------------------------------------------------------------
+- Do not silently add features "to be helpful." If something seems missing,
+  ask, don't assume and build it anyway.
+- Do not switch languages, libraries, or architecture patterns without
+  explicitly flagging the change and why.
+- Do not proceed to the next build step (Section 2) until the current one
+  has been confirmed working by the human, not just "should work in theory."
+- If a library or approach is failing repeatedly, stop and report exactly
+  what was tried and what specifically failed — do not silently replace it
+  with a much larger, more complex alternative (this is what caused the
+  original failure: DSP filters and neural pipelines were added to "fix"
+  problems that a simpler approach could have solved).
+- When in doubt, choose the option that keeps the total system smaller and
+  easier to debug, even at the cost of raw capability. Capability is a
+  future milestone. A working foundation is this milestone.
+
+================================================================================
+END OF STRICT BUILD CONTRACT
+================================================================================

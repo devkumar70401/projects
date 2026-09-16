@@ -1,0 +1,3 @@
+#!/bin/bash
+export PYTHONPATH=/opt/warpsync
+python3 /opt/warpsync/start.py "$@"

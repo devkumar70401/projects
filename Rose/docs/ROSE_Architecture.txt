@@ -1,0 +1,551 @@
+================================================================================
+ROSE — MODULAR VOICE-ACTIVATED SYSTEM
+ARCHITECTURE & COMPONENT SPECIFICATION (v0.1 — "Timer Subsystem" Milestone)
+================================================================================
+Author intent : Personal AI system, built "Lego brick" style, in C, for speed
+                and long-term scalability (target: millions/billions of bricks
+                and subsystems over time).
+Current goal  : NO AI/thinking layer yet. Pure voice-triggered timer feature.
+                Wake word: "Rose". Command: "start timer of 10 minutes".
+                Result: countdown starts, tone rings after time elapses.
+================================================================================
+
+
+TABLE OF CONTENTS
+--------------------------------------------------------------------------------
+1.  Philosophy Recap (technical translation of the Lego metaphor)
+2.  High-Level System Map
+3.  The "Brick" Contract (universal interface every module must obey)
+4.  Communication Backbone (Event Bus / Message Bus)
+5.  Bricks Required for This Milestone (full breakdown)
+6.  The Timer Subsystem (bricks assembled into a working unit)
+7.  Data Flow — step by step, from silence to ringing tone
+8.  Threading & Concurrency Model
+9.  Folder / File Structure
+10. C Struct & Function Signatures (skeleton, no business logic)
+11. Build System (Makefile / CMake notes)
+12. Third-Party Libraries Needed (and why)
+13. Design Patterns Used (and why each was chosen)
+14. Error Handling & Logging Strategy
+15. Scalability Plan — going from 1 subsystem to billions
+16. Versioning & Naming Conventions
+17. Testing Strategy per Brick
+18. Milestone Roadmap (what comes after the timer)
+
+
+================================================================================
+1. PHILOSOPHY RECAP (TECHNICAL TRANSLATION)
+================================================================================
+Your personal metaphor (fully detailed in the .md file) maps to standard
+software-engineering concepts as follows:
+
+    LEGO BRICK        -> A single-responsibility module (one .c/.h pair)
+                          that does ONE job and exposes ONE clean interface.
+
+    SUB-SYSTEM         -> A composed unit made of multiple bricks wired
+                          together to deliver ONE feature (e.g. "Timer").
+
+    MAIN SYSTEM (ROSE) -> The orchestrator/kernel that loads bricks and
+                          subsystems, owns the event bus, and keeps the
+                          system alive (the "baseplate" all bricks snap into).
+
+    CONNECTOR STUDS    -> The standardized function-pointer interface
+                          (init/process/shutdown) every brick must implement,
+                          so any brick can be swapped without breaking others.
+
+This mapping is what allows the system to scale to enormous numbers of
+bricks later: because every brick "snaps in" the same way, adding brick
+number 5,000,000 requires zero changes to bricks 1 through 4,999,999.
+
+
+================================================================================
+2. HIGH-LEVEL SYSTEM MAP
+================================================================================
+
+    ┌─────────────────────────────────────────────────────────────────┐
+    │                        ROSE CORE (main.c)                       │
+    │  - Boots the system                                              │
+    │  - Loads/registers all bricks                                    │
+    │  - Owns the Event Bus                                            │
+    │  - Runs the main loop                                            │
+    └───────────────┬───────────────────────────────┬─────────────────┘
+                    │                               │
+        ┌───────────▼───────────┐       ┌───────────▼───────────┐
+        │   ALWAYS-ON BRICKS     │       │   SUBSYSTEMS (feature  │
+        │  (run continuously)    │       │   -level Lego builds)  │
+        │                        │       │                        │
+        │  [Audio Capture Brick] │       │  [Timer Subsystem]     │
+        │  [Transcription Brick] │       │   - Duration Parser    │
+        │  [Wake-Word Brick]     │       │   - Countdown Engine   │
+        │  [Command Router Brick]│       │   - Tone Player Brick  │
+        └────────────────────────┘       └────────────────────────┘
+
+Everything above communicates ONLY through the Event Bus (see Section 4).
+No brick calls another brick's function directly. This is the single most
+important rule for long-term scalability.
+
+
+================================================================================
+3. THE "BRICK" CONTRACT (UNIVERSAL INTERFACE)
+================================================================================
+Every brick, no matter how simple or complex, must implement this same
+shape. This is the "stud pattern" that lets bricks connect uniformly.
+
+    Required lifecycle functions:
+        - brick_init()      -> allocate resources, subscribe to events
+        - brick_process()   -> optional: called every main-loop tick
+        - brick_shutdown()  -> free resources, unsubscribe
+
+    Required metadata:
+        - brick_id (unique string, e.g. "audio_capture_v1")
+        - brick_version (integer)
+        - brick_capabilities (what events it listens to / emits)
+
+    Communication:
+        - A brick NEVER includes another brick's header file directly
+          for functional calls. It only knows about:
+            a) the Event Bus API (event_bus.h)
+            b) shared plain-data event structs (events.h)
+
+This is enforced by folder structure and code review discipline (Section 9).
+
+
+================================================================================
+4. COMMUNICATION BACKBONE — EVENT BUS (PUB/SUB)
+================================================================================
+Rose bricks talk to each other by publishing and subscribing to EVENTS,
+not by calling functions on each other. This is called a Publish/Subscribe
+(Pub/Sub) pattern, sometimes called an Observer pattern at scale.
+
+Why this matters for you specifically:
+    - You want "millions/billions" of bricks later.
+    - If bricks called each other directly, adding brick #2,000,000 could
+      require touching old code (breaks the "just snap it in" promise).
+    - With an event bus, a NEW brick just subscribes to existing events.
+      Old bricks are never modified.
+
+Core event bus responsibilities:
+    1. register_brick(brick_id)
+    2. subscribe(brick_id, event_type)
+    3. publish(event_type, event_data)
+    4. dispatch loop: deliver published events to all subscribers
+
+Example events for this milestone:
+    EVENT_AUDIO_CHUNK_CAPTURED     -> raw audio buffer ready
+    EVENT_TEXT_TRANSCRIBED         -> transcription brick emits recognized text
+    EVENT_WAKE_WORD_DETECTED       -> wake-word brick heard "Rose"
+    EVENT_COMMAND_PARSED           -> command router emits structured command
+    EVENT_TIMER_START_REQUESTED    -> command matched "start timer"
+    EVENT_TIMER_TICK               -> countdown brick emits every second (optional)
+    EVENT_TIMER_COMPLETED          -> countdown brick reaches zero
+    EVENT_PLAY_TONE_REQUESTED      -> published so Tone Player Brick reacts
+
+
+================================================================================
+5. BRICKS REQUIRED FOR THIS MILESTONE (FULL BREAKDOWN)
+================================================================================
+
+--------------------------------------------------------------------------------
+BRICK 1: AUDIO CAPTURE BRICK
+--------------------------------------------------------------------------------
+Responsibility : Continuously listen to the microphone. Nothing else.
+Input          : Microphone hardware stream
+Output (event) : EVENT_AUDIO_CHUNK_CAPTURED { buffer, length, sample_rate }
+Notes          : Runs on its own thread. Never blocks. Pushes small audio
+                 chunks (e.g. 30-100ms) constantly, forever, while system runs.
+Library option : PortAudio (cross-platform, simple C API) OR ALSA (Linux-only,
+                 lower-level, faster, no external dependency beyond system lib).
+
+--------------------------------------------------------------------------------
+BRICK 2: TRANSCRIPTION BRICK (SPEECH-TO-TEXT)
+--------------------------------------------------------------------------------
+Responsibility : Convert raw audio chunks into text. Nothing else.
+Input (event)  : EVENT_AUDIO_CHUNK_CAPTURED
+Output (event) : EVENT_TEXT_TRANSCRIBED { text, confidence }
+Notes          : This brick does NOT decide meaning. It only turns sound
+                 into words. It has no idea what "Rose" or "timer" means.
+Library option : Vosk API (offline, C API available, lightweight, good for
+                 embedded/real-time) OR whisper.cpp (more accurate, heavier
+                 on CPU — good if you later run on a stronger machine).
+                 Recommendation for "no AI yet, just fast": Vosk, because
+                 it's small, offline, and made for continuous streaming.
+
+--------------------------------------------------------------------------------
+BRICK 3: WAKE-WORD BRICK
+--------------------------------------------------------------------------------
+Responsibility : Watch transcribed text for the word "Rose". Nothing else.
+Input (event)  : EVENT_TEXT_TRANSCRIBED
+Output (event) : EVENT_WAKE_WORD_DETECTED { remaining_text_after_wakeword }
+Notes          : Simple string search (case-insensitive) for now — this is
+                 intentionally "dumb" per your request (no AI/thinking yet).
+                 Later this brick can be swapped for a dedicated wake-word
+                 model (e.g. Porcupine) without touching any other brick —
+                 this is the whole point of the Lego design.
+
+--------------------------------------------------------------------------------
+BRICK 4: COMMAND ROUTER BRICK
+--------------------------------------------------------------------------------
+Responsibility : After wake word, look at the remaining text and match it
+                 against known command patterns. Nothing else.
+Input (event)  : EVENT_WAKE_WORD_DETECTED
+Output (event) : EVENT_TIMER_START_REQUESTED { duration_seconds }
+                 (or, later, other *_REQUESTED events for other subsystems)
+Notes          : For now this brick only understands ONE pattern:
+                 "start timer of <N> minutes/seconds/hours"
+                 It uses simple keyword + number extraction (regex-like
+                 manual parsing in C, no NLP/AI). This keeps it fast and
+                 fully deterministic, matching your "no AI for now" rule.
+                 This brick is effectively the "front desk" that will,
+                 in the future, route commands to MANY subsystems (not
+                 just Timer) — this is your scalability hook.
+
+--------------------------------------------------------------------------------
+BRICK 5 (SUBSYSTEM): DURATION PARSER BRICK
+--------------------------------------------------------------------------------
+Responsibility : Convert human phrasing ("10 minutes") into raw seconds.
+Input          : Called by Command Router (or subscribes to raw text event)
+Output         : integer seconds (e.g. 600)
+Notes          : Small, pure-logic brick. No I/O. Easiest to unit test.
+
+--------------------------------------------------------------------------------
+BRICK 6 (SUBSYSTEM): COUNTDOWN ENGINE BRICK
+--------------------------------------------------------------------------------
+Responsibility : Own the actual timer countdown logic. Nothing else.
+Input (event)  : EVENT_TIMER_START_REQUESTED { duration_seconds }
+Output (event) : EVENT_TIMER_TICK { seconds_remaining }   [optional, for future UI]
+                 EVENT_TIMER_COMPLETED { }
+Notes          : Runs its own lightweight thread or uses a monotonic clock
+                 + main loop tick. Must NOT drift (use CLOCK_MONOTONIC on
+                 Linux, not wall-clock time, to avoid issues if system
+                 clock changes).
+
+--------------------------------------------------------------------------------
+BRICK 7 (SUBSYSTEM): TONE PLAYER BRICK
+--------------------------------------------------------------------------------
+Responsibility : Play an audible tone/sound. Nothing else.
+Input (event)  : EVENT_TIMER_COMPLETED (or generic EVENT_PLAY_TONE_REQUESTED)
+Output         : Sound played through speaker
+Notes          : Deliberately generic — named "Tone Player" not "Timer Tone
+                 Player" — because ANY future subsystem (alarms, reminders,
+                 notifications) can reuse this exact brick by publishing
+                 EVENT_PLAY_TONE_REQUESTED. This is a good example of a
+                 brick built for REUSE across many future subsystems.
+Library option : miniaudio.h (single-header C library, generates/plays
+                 simple sine-wave tones or WAV files, no heavy dependency)
+                 OR simplest possible version: system beep via terminal
+                 bell ('\a') for a true "zero dependency" first prototype.
+
+
+================================================================================
+6. THE TIMER SUBSYSTEM (BRICKS ASSEMBLED)
+================================================================================
+"Timer Subsystem" = Duration Parser Brick + Countdown Engine Brick +
+                     Tone Player Brick, wired together via the Event Bus.
+
+    [Command Router Brick]
+            │  publishes EVENT_TIMER_START_REQUESTED{600}
+            ▼
+    [Countdown Engine Brick] ---- ticks down using CLOCK_MONOTONIC
+            │  after 600s, publishes EVENT_TIMER_COMPLETED
+            ▼
+    [Tone Player Brick] ---- plays tone
+
+Notice: the Timer Subsystem itself has NO idea a human said "Rose", and
+has NO idea what a microphone is. It only reacts to events. This means
+you could later trigger the exact same Timer Subsystem from a phone app,
+a button, or a scheduled cron-like brick — total reusability.
+
+
+================================================================================
+7. DATA FLOW — STEP BY STEP (SILENCE TO RINGING TONE)
+================================================================================
+1.  Audio Capture Brick continuously records mic audio in small chunks.
+2.  Each chunk -> EVENT_AUDIO_CHUNK_CAPTURED published on the bus.
+3.  Transcription Brick receives chunk, runs speech-to-text, accumulates
+    a rolling text buffer, publishes EVENT_TEXT_TRANSCRIBED when it has
+    a stable phrase.
+4.  Wake-Word Brick receives transcribed text, scans for "rose"
+    (case-insensitive). If found, publishes EVENT_WAKE_WORD_DETECTED with
+    whatever text came AFTER the word "Rose" (e.g. "start timer of 10 minutes").
+5.  Command Router Brick receives that event, matches the pattern
+    "start timer of <number> <unit>", extracts 10 and "minutes".
+6.  Command Router calls Duration Parser Brick -> gets 600 (seconds).
+7.  Command Router publishes EVENT_TIMER_START_REQUESTED{600}.
+8.  Countdown Engine Brick receives it, starts a monotonic countdown.
+9.  Every second (optional) it may publish EVENT_TIMER_TICK for future
+    display purposes (not required for v0.1).
+10. When countdown reaches 0, Countdown Engine publishes
+    EVENT_TIMER_COMPLETED.
+11. Tone Player Brick receives that event and plays the ringing tone.
+12. System returns to step 1, listening again — always on.
+
+
+================================================================================
+8. THREADING & CONCURRENCY MODEL
+================================================================================
+Recommended model for v0.1 (simple, correct, fast enough):
+
+    - Thread 1 (main)         : Event Bus dispatch loop + Command Router +
+                                 Wake-Word Brick + Duration Parser (all
+                                 lightweight, CPU-cheap, can share a thread).
+    - Thread 2                : Audio Capture Brick (blocking mic read loop).
+    - Thread 3                : Transcription Brick (speech-to-text can be
+                                 CPU-heavy; isolate it so it never blocks
+                                 audio capture).
+    - Thread 4 (per active timer): Countdown Engine Brick — one thread per
+                                 running timer, so multiple timers could run
+                                 simultaneously in the future without conflict.
+    - Tone Player Brick       : Can run synchronously on whichever thread
+                                 publishes EVENT_TIMER_COMPLETED, or spin a
+                                 short-lived thread to avoid blocking anything.
+
+Synchronization:
+    - Event Bus queue must be protected by a mutex + condition variable
+      (producer/consumer pattern) since multiple threads publish events.
+    - Use a thread-safe ring buffer or simple mutex-guarded linked list
+      for the event queue in v0.1 — no need for lock-free structures yet
+      at this scale.
+
+
+================================================================================
+9. FOLDER / FILE STRUCTURE
+================================================================================
+rose/
+├── core/
+│   ├── main.c                  (Rose Core: boot, load bricks, run loop)
+│   ├── event_bus.c / .h        (publish/subscribe engine)
+│   ├── events.h                (all shared event struct definitions)
+│   └── brick.h                 (universal Brick interface contract)
+│
+├── bricks/
+│   ├── audio_capture/
+│   │   ├── audio_capture.c
+│   │   └── audio_capture.h
+│   ├── transcription/
+│   │   ├── transcription.c
+│   │   └── transcription.h
+│   ├── wake_word/
+│   │   ├── wake_word.c
+│   │   └── wake_word.h
+│   ├── command_router/
+│   │   ├── command_router.c
+│   │   └── command_router.h
+│   └── tone_player/
+│       ├── tone_player.c
+│       └── tone_player.h
+│
+├── subsystems/
+│   └── timer/
+│       ├── duration_parser.c / .h
+│       ├── countdown_engine.c / .h
+│       └── timer_subsystem.c / .h   (wires the 3 bricks together)
+│
+├── third_party/
+│   ├── vosk/                   (speech-to-text library + model files)
+│   └── miniaudio.h             (single-header audio playback library)
+│
+├── tests/
+│   ├── test_event_bus.c
+│   ├── test_duration_parser.c
+│   └── test_wake_word.c
+│
+├── Makefile
+└── README.md
+
+Rule: a brick's .c file NEVER #includes another brick's .h file. It may
+only include core/event_bus.h, core/events.h, and core/brick.h.
+
+
+================================================================================
+10. C STRUCT & FUNCTION SIGNATURES (SKELETON ONLY — NO LOGIC YET)
+================================================================================
+
+--- core/brick.h -----------------------------------------------------------
+typedef struct {
+    const char *brick_id;
+    int         version;
+    int  (*init)(void);
+    void (*process)(void);   /* optional, called each main loop tick */
+    void (*shutdown)(void);
+} Brick;
+
+--- core/events.h -----------------------------------------------------------
+typedef enum {
+    EVENT_AUDIO_CHUNK_CAPTURED,
+    EVENT_TEXT_TRANSCRIBED,
+    EVENT_WAKE_WORD_DETECTED,
+    EVENT_TIMER_START_REQUESTED,
+    EVENT_TIMER_TICK,
+    EVENT_TIMER_COMPLETED,
+    EVENT_PLAY_TONE_REQUESTED,
+    EVENT_COUNT   /* keep last */
+} EventType;
+
+typedef struct {
+    EventType type;
+    void      *data;      /* points to a specific payload struct */
+    size_t     data_size;
+} Event;
+
+--- core/event_bus.h --------------------------------------------------------
+int  event_bus_init(void);
+int  event_bus_subscribe(EventType type, void (*callback)(Event *e));
+int  event_bus_publish(Event e);
+void event_bus_run(void);       /* dispatch loop */
+void event_bus_shutdown(void);
+
+--- bricks/audio_capture/audio_capture.h ------------------------------------
+int  audio_capture_init(void);
+void audio_capture_shutdown(void);
+
+--- bricks/transcription/transcription.h ------------------------------------
+int  transcription_init(void);
+void transcription_shutdown(void);
+
+--- bricks/wake_word/wake_word.h ---------------------------------------------
+int  wake_word_init(void);
+void wake_word_shutdown(void);
+
+--- bricks/command_router/command_router.h -----------------------------------
+int  command_router_init(void);
+void command_router_shutdown(void);
+
+--- subsystems/timer/duration_parser.h ----------------------------------------
+/* pure function, no init/shutdown needed */
+int parse_duration_to_seconds(const char *text);
+
+--- subsystems/timer/countdown_engine.h ---------------------------------------
+int  countdown_engine_init(void);
+void countdown_engine_shutdown(void);
+
+--- bricks/tone_player/tone_player.h -------------------------------------------
+int  tone_player_init(void);
+void tone_player_shutdown(void);
+
+
+================================================================================
+11. BUILD SYSTEM (MAKEFILE NOTES)
+================================================================================
+Recommended: a single top-level Makefile that:
+    - Compiles every bricks/*/*.c and subsystems/*/*.c and core/*.c
+      into individual object files.
+    - Links them all into one binary "rose".
+    - Later, when brick count grows huge, switch to CMake with
+      automatic GLOB of bricks/ and subsystems/ directories, or move
+      to a plugin model where bricks compile as shared libraries (.so)
+      and are loaded at runtime with dlopen() — this is the real path
+      to "billions of bricks" without ever recompiling the core.
+
+CFLAGS suggestion: -Wall -Wextra -O2 -pthread
+LDLIBS suggestion: -lasound (if ALSA) or -lportaudio, -lvosk, -lm, -lpthread
+
+
+================================================================================
+12. THIRD-PARTY LIBRARIES NEEDED (AND WHY)
+================================================================================
+- Audio input   : PortAudio (portable) or ALSA (Linux native, faster, no dep)
+- Speech-to-text: Vosk (offline, C API, lightweight, streaming-friendly)
+- Audio output  : miniaudio.h (single header, no build system needed, can
+                  generate a pure sine-wave tone in code — no WAV file needed)
+- Threading     : POSIX pthreads (standard on Linux, part of glibc)
+- Timing        : POSIX clock_gettime(CLOCK_MONOTONIC, ...) — never use
+                  time() for countdowns, it can jump if system clock changes.
+
+
+================================================================================
+13. DESIGN PATTERNS USED (AND WHY EACH WAS CHOSEN)
+================================================================================
+- Publish/Subscribe (Observer at scale) : decouples every brick from every
+  other brick. This is the #1 pattern enabling "billions of bricks" later.
+- Strategy Pattern                      : Wake-Word Brick, Transcription
+  Brick etc. can be swapped for a different implementation (different
+  algorithm/library) as long as they keep the same events in/out.
+- Factory-style Brick Registration      : Rose Core doesn't hardcode brick
+  creation logic forever — later, a Brick Registry can dynamically
+  discover and load bricks (paves the way to Section 15's plugin model).
+- Single Responsibility Principle       : the literal foundation of "one
+  brick = one job", directly mirrors your Lego metaphor.
+- Composition over Inheritance          : Subsystems are built by
+  COMPOSING bricks together (event wiring), never by one brick inheriting
+  or extending another — C doesn't have inheritance, and this matches
+  your Lego philosophy naturally.
+
+
+================================================================================
+14. ERROR HANDLING & LOGGING STRATEGY
+================================================================================
+- Every brick's init() returns an int: 0 = success, non-zero = specific
+  error code. Rose Core logs the failure and can choose to continue
+  running WITHOUT that brick (graceful degradation) rather than crashing
+  the whole system — critical once you have huge numbers of bricks, since
+  one bad brick should never take down the entire Rose system.
+- A simple centralized logging brick (or just a logging utility, not a
+  full brick) should timestamp and tag every log line with the brick_id
+  that produced it, e.g.: [2026-08-22 10:03:12] [wake_word] wake word detected.
+
+
+================================================================================
+15. SCALABILITY PLAN — 1 SUBSYSTEM TO BILLIONS
+================================================================================
+Stage 1 (NOW)      : Static linking. All bricks compiled directly into one
+                      binary. Fine for a handful to a few hundred bricks.
+Stage 2 (later)    : Dynamic brick loading via shared libraries (.so files)
+                      + dlopen()/dlsym(). Rose Core scans a "bricks/" folder
+                      at startup and loads each .so automatically. Adding
+                      a new brick becomes "drop a file in a folder", exactly
+                      like snapping in a new Lego piece with zero recompiling.
+Stage 3 (later)    : Command Router evolves into a full Intent Dispatcher
+                      that can route to thousands of subsystems, likely
+                      backed by a lookup table / trie instead of if/else.
+Stage 4 (later)    : Event Bus evolves from single-process pub/sub into a
+                      distributed message broker (still following the same
+                      pub/sub contract) if bricks eventually run across
+                      multiple machines/processes.
+Key principle throughout: the Brick Contract (Section 3) and Event-driven
+communication (Section 4) NEVER change. Everything else is free to evolve
+underneath them.
+
+
+================================================================================
+16. VERSIONING & NAMING CONVENTIONS
+================================================================================
+- Brick IDs        : lowercase_snake_case, e.g. "audio_capture", "tone_player"
+- Event names      : EVENT_SCREAMING_SNAKE_CASE
+- File names       : match brick_id exactly (brick.c / brick.h)
+- Subsystem folders: subsystems/<subsystem_name>/
+- Version numbers  : simple integer per brick, incremented on any interface
+                      (event in/out) change — NOT on internal logic changes.
+
+
+================================================================================
+17. TESTING STRATEGY PER BRICK
+================================================================================
+- Duration Parser Brick : pure function -> easiest to unit test directly
+  (feed strings like "10 minutes", "2 hours", assert correct seconds).
+- Wake-Word Brick       : feed sample transcribed strings, assert correct
+  detection + correct "remaining text" extraction.
+- Command Router Brick  : feed sample post-wake-word strings, assert
+  correct EVENT_TIMER_START_REQUESTED payload.
+- Countdown Engine Brick: use a short test duration (e.g. 2 seconds) and
+  assert EVENT_TIMER_COMPLETED fires within an acceptable time window.
+- Audio/Transcription/Tone bricks: harder to unit test (hardware-dependent)
+  — use manual/integration testing for these, or mock the audio layer.
+
+
+================================================================================
+18. MILESTONE ROADMAP (WHAT COMES AFTER THE TIMER)
+================================================================================
+v0.1 (now)  : Voice-activated Timer Subsystem (this document).
+v0.2        : Multiple simultaneous timers ("start timer of 5 minutes for
+              tea" + "start timer of 20 minutes for laundry").
+v0.3        : Dynamic brick loading (.so plugin system) — see Section 15.
+v0.4        : Additional subsystems reusing existing bricks (e.g. "Reminder
+              Subsystem" reusing Tone Player Brick + a new Scheduler Brick).
+v1.0+       : Intelligence layer (actual AI/NLP) added ONLY as new bricks
+              that plug into the same Command Router / Event Bus — the
+              non-AI deterministic bricks built now do not need to be
+              thrown away; they simply get joined by smarter ones later.
+
+================================================================================
+END OF DOCUMENT
+================================================================================

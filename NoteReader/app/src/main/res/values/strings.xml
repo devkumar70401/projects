@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">NoteReader</string>
+    <string name="notebooks">Notebooks</string>
+    <string name="sections">Sections</string>
+    <string name="pages">Pages</string>
+    <string name="import_document">Import Document</string>
+    <string name="new_notebook">New Notebook</string>
+    <string name="new_section">New Section</string>
+    <string name="search_hint">Search notebooks, sections, and documents…</string>
+</resources>

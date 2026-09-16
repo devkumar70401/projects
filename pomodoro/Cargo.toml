@@ -1,0 +1,30 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/pomodoro-core",
+    "crates/pomodoro-guard",
+    "crates/pomodoro-cli",
+    "crates/pomodoro-ui",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["Devendra <dev@local>"]
+license = "MIT OR Apache-2.0"
+
+[workspace.dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+libc = "0.2"
+nix = { version = "0.31", features = ["fs", "socket", "uio", "signal", "process", "user"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+thiserror = "2.0"
+proptest = "1.11"
+image = "0.25"
+tiny-skia = "0.12"
+bytemuck = "1.25"
+winit = { version = "0.30", features = ["rwh_06"] }
+softbuffer = "0.4"
+pomodoro-core = { path = "crates/pomodoro-core" }

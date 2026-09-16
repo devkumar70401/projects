@@ -1,0 +1,6 @@
+{
+  "name": "NoteReader",
+  "description": "A refined, matte paper notebook library and immersive reader for research papers, markdown notes, and computational notebooks.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

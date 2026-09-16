@@ -1,0 +1,231 @@
+[settings]
+overlay_duration_secs = 25
+overlay_mode          = "fullscreen"
+allow_snooze          = true
+snooze_minutes        = 5
+play_sound            = true
+sound_file            = "/home/dev/Music/li_xiang_lan.wav"
+grace_period_minutes  = 10
+timezone              = "system"
+
+# ==========================================
+# PHASE 1: WAKE-UP & MORNING HYDRATION MATRIX
+# ==========================================
+[[entries]]
+id      = "phase-01"
+start   = "08:00"
+end     = "08:30"
+title   = "Wake Up, Hygiene & Morning Hydration Matrix"
+repeat  = "daily"
+fire_at = "start"
+granular_blocks = [
+    { id = "block-01-wakeup", title = "Wake Up & Out of Bed", category = "WAKE", time = "08:00 AM", detail = "Immediate rise upon alarm to trigger Cortisol Awakening Response (CAR)" },
+    { id = "block-01-brush", title = "Brush Teeth", category = "ROUTINE", time = "08:05 AM", detail = "Oral hygiene and tongue cleaning to clear overnight oral microbiome" },
+    { id = "block-01-facewash", title = "Face Wash (Pre-Shower)", category = "ROUTINE", time = "08:10 AM", detail = "Gentle facial wash to clear overnight sebum, unblock pores, and refresh skin before shower" },
+    { id = "block-01-bath", title = "Bath / Morning Shower", category = "ROUTINE", time = "08:15 AM", detail = "Invigorating shower to stimulate sympathetic alertness and dopamine" },
+    { id = "block-01-water", title = "500ml Warm / Room-Temp Water", category = "HYDRATION", time = "08:20 AM", detail = "Rehydrates brain neurons and restores circulating blood volume" },
+    { id = "block-01-salt", title = "1/4 tsp Sendha Namak (Rock Salt)", category = "INGREDIENT", time = "08:25 AM", detail = "Supplies sodium, potassium and trace minerals for cellular osmotic balance" },
+    { id = "block-01-lemon", title = "Fresh Lemon Juice Squeeze", category = "INGREDIENT", time = "08:28 AM", detail = "Ascorbic acid primes digestive enzymatic secretions without insulin spike" }
+]
+
+# ==========================================
+# PHASE 2: PHOTON SYNCHRONIZATION
+# ==========================================
+[[entries]]
+id      = "phase-02"
+start   = "08:30"
+end     = "08:45"
+title   = "Photon Sync: 15m Morning Sun (UV 0-1)"
+repeat  = "daily"
+fire_at = "start"
+granular_blocks = [
+    { id = "block-02-sunlight", title = "15-Minute Direct Morning Sunlight", category = "ROUTINE", time = "08:30 – 08:45 AM", detail = "Outdoor sky/sun exposure to reset SCN circadian clock and suppress residual melatonin" }
+]
+
+# ==========================================
+# PHASE 3: FUEL PHASE 1 (MORNING BRAIN PRIMING)
+# ==========================================
+[[entries]]
+id      = "phase-03"
+start   = "08:45"
+end     = "09:30"
+title   = "Fuel Phase 1: Morning Brain Priming"
+repeat  = "daily"
+fire_at = "start"
+granular_blocks = [
+    { id = "block-03-chia", title = "12g Pre-soaked Chia Tonic", category = "INGREDIENT", time = "08:45 AM", detail = "12g soaked in 150ml water: hydrophilic mucilage coats gut and eliminates glucose spikes" },
+    { id = "block-03-almonds", title = "15g Soaked & Peeled Almonds (12-14 Kernels)", category = "INGREDIENT", time = "08:50 AM", detail = "Peeled to discard enzyme inhibitors, guaranteeing 90%+ mineral absorption" },
+    { id = "block-03-walnuts", title = "15g-20g Walnut Kernels (Shelled / 6-8 Halves)", category = "INGREDIENT", time = "08:55 AM", detail = "Edible meat without woody outer shell (keep thin brown skin on for polyphenols); ALA Omega-3" },
+    { id = "block-03-banana", title = "100g Fresh Banana (1 medium)", category = "INGREDIENT", time = "09:05 AM", detail = "Potassium, Vitamin B6, and rapid cellular glycogen for brain priming" },
+    { id = "block-03-pb-roti", title = "40g Atta Roti + 25g-30g Natural PB", category = "INGREDIENT", time = "09:15 AM", detail = "Complex carbs with sustained monounsaturated fats (MUFAs) and L-Tyrosine" },
+    { id = "block-03-peanuts", title = "25g-30g Roasted Peanuts (Shelled / No Pods)", category = "INGREDIENT", time = "09:18 AM", detail = "Net edible seeds; concentrated L-Tyrosine (dopamine) & Resveratrol for 4h AI/ML math sprint" },
+    { id = "block-03-chana", title = "35g-40g Roasted Chana (Bengal Gram)", category = "INGREDIENT", time = "09:22 AM", detail = "Slow-burning complex carbs & zinc: flat mental stamina curve for 4h deep work sprint" },
+    { id = "block-03-moringa", title = "1.5g-3g (1/2-1 tsp) Organic India Moringa Powder", category = "INGREDIENT", time = "09:25 AM", detail = "Stirred into morning warm lemon water/breakfast; lemon ascorbic acid unlocks non-heme iron" },
+    { id = "block-03-d3", title = "Dr. Excel D3 Softgel (60,000 IU) [SUNDAYS ONLY]", category = "INGREDIENT", time = "09:28 AM", detail = "1 softgel weekly with breakfast fats (PB/nuts) for 80%+ micellar uptake; strictly weekly (never daily)" }
+]
+
+# ==========================================
+# PHASE 4: AI/ML SPRINT 1
+# ==========================================
+[[entries]]
+id      = "phase-04"
+start   = "09:30"
+end     = "13:30"
+title   = "AI/ML Sprint 1: Deep Math & Algorithmic Focus"
+repeat  = "daily"
+fire_at = "start"
+granular_blocks = [
+    { id = "block-04-aiml-math", title = "AI/ML Sprint 1: Deep Math & Algorithmic Focus (4h)", category = "WORK", time = "09:30 AM – 01:30 PM", detail = "Tensor mathematics, ML pipelines, and deep debugging in uninterrupted flow state" },
+    { id = "block-04-hydration", title = "Deep Work Mineralized Hydration Check", category = "HYDRATION", time = "11:30 AM", detail = "Sip clean mineralized water throughout deep work to sustain cognitive stamina" }
+]
+
+# ==========================================
+# PHASE 5: FUEL PHASE 2 (ANTI-COMA LUNCH)
+# ==========================================
+[[entries]]
+id      = "phase-05"
+start   = "13:30"
+end     = "14:00"
+title   = "Fuel Phase 2: Anti-Coma Power Lunch"
+repeat  = "daily"
+fire_at = "start"
+granular_blocks = [
+    { id = "block-05-soya", title = "50g-60g Soya Chunks (Double-Boiled & Squeezed Twice)", category = "INGREDIENT", time = "01:30 PM", detail = "Water dumped twice to discard flatulence oligosaccharides; 30g pure clean protein" },
+    { id = "block-05-veggies", title = "150g-200g Sautéed Veggies in 5g Ghee/Mustard Oil", category = "INGREDIENT", time = "01:35 PM", detail = "Cooked tender-crisp in 1 tsp fat: clean dietary fiber and phytonutrients" },
+    { id = "block-05-roti", title = "40g Atta Roti (Strict Single-Roti Cap)", category = "INGREDIENT", time = "01:40 PM", detail = "Strict single-roti limit prevents insulin spike and postprandial food coma" },
+    { id = "block-05-lemon", title = "10g-15g Fresh Lemon Juice Squeeze", category = "INGREDIENT", time = "01:45 PM", detail = "Ascorbic acid converts non-heme ferric iron to absorbable Fe2+ (+300% uptake)" }
+]
+
+# ==========================================
+# PHASE 6: GLUT4 ACTIVATION WALK
+# ==========================================
+[[entries]]
+id      = "phase-06"
+start   = "14:00"
+end     = "14:30"
+title   = "GLUT4 Activation: 10-Minute Walk & Decompression"
+repeat  = "daily"
+fire_at = "start"
+granular_blocks = [
+    { id = "block-06-glut4-walk", title = "GLUT4 Activation: 10-Minute Brisk Walk", category = "EXERCISE", time = "02:00 – 02:30 PM", detail = "10-15 min walking immediately post-meal to clear blood glucose into muscles without insulin surge" }
+]
+
+# ==========================================
+# PHASE 7: ROBOTICS SPRINT 2
+# ==========================================
+[[entries]]
+id      = "phase-07"
+start   = "14:30"
+end     = "17:30"
+title   = "Robotics Sprint 2: Kinematics, Simulation & Code"
+repeat  = "daily"
+fire_at = "start"
+granular_blocks = [
+    { id = "block-07-robotics", title = "Robotics Sprint 2: Kinematics, ROS2 & Isaac Sim (3h)", category = "WORK", time = "02:30 – 05:30 PM", detail = "Spatial 3D coordinate transforms, state estimation, ROS2 nodes, Isaac Sim execution" }
+]
+
+# ==========================================
+# PHASE 8: FUEL PHASE 3 (EVENING EGG/PANEER RESET)
+# ==========================================
+[[entries]]
+id      = "phase-08"
+start   = "17:30"
+end     = "18:30"
+title   = "Fuel Phase 3: 6 PM High-Octane Egg Reset (Tue: Paneer)"
+repeat  = "daily"
+fire_at = "start"
+granular_blocks = [
+    { id = "block-08-eggs-paneer", title = "4 Whole Boiled Eggs (~200g Peeled) (Tue: 100g Fresh Paneer/Tofu)", category = "INGREDIENT", time = "05:30 PM", detail = "560mg Choline for acetylcholine synthesis, retinal lutein, DHA and complete protein" },
+    { id = "block-08-pumpkin", title = "15g Raw Pumpkin Seeds (Shelled Pepitas)", category = "INGREDIENT", time = "05:45 PM", detail = "Green hulled seeds without white shell: 90mg elemental Magnesium + Tryptophan for GABA calming" },
+    { id = "block-08-lemon", title = "10g Fresh Lemon Juice Squeeze", category = "INGREDIENT", time = "05:48 PM", detail = "Ascorbic acid catalyst optimizing mineral absorption on eggs" },
+    { id = "block-08-creatine", title = "3g-5g Tata 1mg Micronized Creatine Monohydrate in Water", category = "INGREDIENT", time = "05:50 PM", detail = "Donates phosphate to ADP for instant cerebral ATP regeneration; paired with egg protein for insulin-mediated CreaT uptake" }
+]
+
+# ==========================================
+# PHASE 9: CORE SPRINT 3 / REVIEW
+# ==========================================
+[[entries]]
+id      = "phase-09"
+start   = "18:30"
+end     = "19:30"
+title   = "Core Sprint 3 / Engineering Review / Posture"
+repeat  = "daily"
+fire_at = "start"
+granular_blocks = [
+    { id = "block-09-core-review", title = "Core Sprint 3: Code Review, Hardware Calibration or Workout (1h)", category = "WORK", time = "06:30 – 07:30 PM", detail = "1 hour focused execution powered by freshly synthesized acetylcholine and cellular creatine" }
+]
+
+# ==========================================
+# PHASE 10: ENGLISH PRACTICE & FLUENCY
+# ==========================================
+[[entries]]
+id      = "phase-10"
+start   = "19:30"
+end     = "20:30"
+title   = "1-Hour English Practice & Active Fluency"
+repeat  = "daily"
+fire_at = "start"
+granular_blocks = [
+    { id = "block-10-english", title = "1-Hour English Practice & Active Fluency", category = "WORK", time = "07:30 – 08:30 PM", detail = "Vocal drills, shadowing native audio, pronunciation refinement, presentation delivery" }
+]
+
+# ==========================================
+# PHASE 11: FUEL PHASE 4 (RECOVERY DINNER)
+# ==========================================
+[[entries]]
+id      = "phase-11"
+start   = "20:30"
+end     = "21:00"
+title   = "Fuel Phase 4: Light Recovery Dinner (Done by 21:00)"
+repeat  = "daily"
+fire_at = "start"
+granular_blocks = [
+    { id = "block-11-khichdi", title = "200g Moong Dal Khichdi (40g Dal + 20g Rice dry)", category = "INGREDIENT", time = "08:30 PM", detail = "Light, easily digestible tryptophan source; MUST finish before 21:00 to guarantee fasting gap" },
+    { id = "block-11-curd", title = "100g-120g Fresh Curd / Dahi", category = "INGREDIENT", time = "08:45 PM", detail = "Probiotics and calcium; consumed ONLY at dinner so calcium doesn't block daytime iron" }
+]
+
+# ==========================================
+# PHASE 12: 3-HOUR FASTING GAP & AMBER DISPLAY
+# ==========================================
+[[entries]]
+id      = "phase-12"
+start   = "21:00"
+end     = "23:30"
+title   = "3-Hour Fasting Gap: Decompression & Amber Display"
+repeat  = "daily"
+fire_at = "start"
+granular_blocks = [
+    { id = "block-12-fasting", title = "3-Hour Night Fasting Gap (Zero Calorie Intake)", category = "ROUTINE", time = "09:00 – 11:30 PM", detail = "Zero food intake between 21:00 and 00:00: ensures empty GI tract for slow-wave sleep" },
+    { id = "block-12-amber-display", title = "Amber Display (2000K, <= 15% Brightness)", category = "ROUTINE", time = "09:30 PM", detail = "Eliminates 460nm blue photons to protect pineal gland melatonin production" }
+]
+
+# ==========================================
+# PHASE 13: NIGHT WIND-DOWN & HYDRATION
+# ==========================================
+[[entries]]
+id      = "phase-13"
+start   = "23:30"
+end     = "00:00"
+title   = "System Wind-Down & Night Hydration"
+repeat  = "daily"
+fire_at = "start"
+crosses_midnight = true
+granular_blocks = [
+    { id = "block-13-night-water", title = "Night Hydration: 200ml Room-Temp Water", category = "HYDRATION", time = "11:30 PM", detail = "Prevents nocturnal blood viscosity and dehydration without waking for urination" },
+    { id = "block-13-dahi-prep", title = "Next-Day Fresh Dahi Prep (11:40 PM)", category = "ROUTINE", time = "11:40 PM", detail = "Whisk 1/2 tsp starter into 150ml–200ml lukewarm milk; 7–8h overnight lactic fermentation for tomorrow's recovery dinner" },
+    { id = "block-13-sleep-prep", title = "Dark & Cool Bedroom Preparation", category = "ROUTINE", time = "11:45 PM", detail = "Cool room environment, pitch dark space: lowers core body temp for hypothalamic sleep trigger" }
+]
+
+# ==========================================
+# PHASE 14: DEEP RESTORATIVE SLEEP (EXPLICIT SLEEP BLOCK)
+# ==========================================
+[[entries]]
+id      = "phase-14"
+start   = "00:00"
+end     = "08:00"
+title   = "Offline / Full Glymphatic Brain Recovery (8h Deep Sleep)"
+repeat  = "daily"
+fire_at = "start"
+granular_blocks = [
+    { id = "block-14-deep-sleep", title = "Sleep Block: 8 Hours Deep Restorative Sleep", category = "SLEEP", time = "12:00 – 08:00 AM", detail = "Complete darkness and cool air; Glymphatic System expands 60% to flush beta-amyloid and cerebral metabolic waste" }
+]

@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  warpsync:
+    build: .
+    container_name: warpsync_local_share
+    network_mode: "host" # Host network mode so local IP detection and mDNS work seamlessly
+    volumes:
+      - ./downloads:/app/downloads
+    restart: unless-stopped

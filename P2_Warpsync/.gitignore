@@ -1,0 +1,23 @@
+# Python & Virtualenv
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+ENV/
+*.egg-info/
+.pytest_cache/
+
+# User Uploads / Received Files (do not commit transfers to git)
+downloads/
+uploads/
+
+# IDE & System
+.vscode/
+.idea/
+.DS_Store
+*.swp
+
+# Docker
+.docker/

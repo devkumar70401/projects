@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WarpSync — Instant P2P File & Text Share</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="brand">
+            <span class="brand-icon">⚡</span>
+            <span>WarpSync</span>
+            <span class="version-badge">v2.0</span>
+        </div>
+        <div class="nav-actions">
+            <!-- Theme Selector Dropdown -->
+            <select id="theme-selector" class="theme-select" onchange="changeTheme(this.value)">
+                <option value="midnight">🌙 Midnight Cyan</option>
+                <option value="cyberpunk">🌆 Cyberpunk Neon</option>
+                <option value="nordic">❄️ Nordic Slate (Light)</option>
+                <option value="matrix">🟢 Matrix Emerald</option>
+            </select>
+
+            <div class="status-badge">
+                <div class="dot" id="status-dot"></div>
+                <span id="peer-status">Connected (1 Device)</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="hero-grid">
+            <!-- Upload Dropzone -->
+            <div class="glass-card">
+                <div class="section-title">
+                    <span>📤</span> Send Files to Nearby Devices
+                </div>
+                <div class="dropzone" id="dropzone">
+                    <div class="dropzone-icon">⚡</div>
+                    <h3>Drag & Drop Files Here</h3>
+                    <p style="color: var(--text-muted); margin: 0.5rem 0 1.25rem 0; font-size: 0.9rem;">
+                        Share photos, videos, documents, or archives instantly over Wi-Fi / LAN
+                    </p>
+                    <input type="file" id="file-input" multiple style="display: none;">
+                    <button class="btn-primary" onclick="document.getElementById('file-input').click()">
+                        <span>📁</span> Select Files
+                    </button>
+                </div>
+                <div class="progress-bar-container" id="progress-container">
+                    <div class="progress-bar-fill" id="progress-bar"></div>
+                </div>
+                <p id="upload-status" style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--primary); display: none;"></p>
+            </div>
+
+            <!-- Access QR Code & Device Pairing -->
+            <div class="glass-card qr-section">
+                <div class="section-title" style="margin-bottom: 0;">
+                    <span>📱</span> Connect Phone / Device
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); text-align: center;">
+                    Scan QR code on mobile camera to open WarpSync instantly
+                </p>
+                <div class="qr-box">
+                    <img src="{{ qr_b64 }}" alt="Access QR Code" class="qr-img">
+                </div>
+                <div class="url-box" id="url-text">{{ access_url }}</div>
+                <button class="btn-primary" style="padding: 0.45rem 1.1rem; font-size: 0.8rem;" onclick="copyAccessUrl()">
+                    📋 Copy Network URL
+                </button>
+            </div>
+        </div>
+
+        <!-- Shared Received Files Section -->
+        <div class="glass-card">
+            <div class="section-header">
+                <div class="section-title">
+                    <span>📥</span> Received Files Library
+                    <span class="count-badge" id="file-count-badge">0</span>
+                </div>
+            </div>
+            <div class="file-list" id="file-list">
+                <p style="color: var(--text-muted); text-align: center; padding: 2rem;">Loading received files...</p>
+            </div>
+        </div>
+
+        <!-- Quick Clipboard / Text Share Section -->
+        <div class="glass-card">
+            <div class="section-header">
+                <div class="section-title">
+                    <span>📋</span> Real-Time Text & Link Clipboard
+                    <span class="count-badge" id="clip-count-badge">0</span>
+                </div>
+                <button class="btn-secondary" style="font-size: 0.75rem; padding: 0.3rem 0.6rem;" onclick="clearAllClipboard()">
+                    🗑️ Clear All
+                </button>
+            </div>
+            <div class="clipboard-input-group">
+                <input type="text" id="clip-input" class="input-text" placeholder="Type or paste a message, URL, or code snippet...">
+                <button class="btn-primary" onclick="sendClipboard()">
+                    <span>🚀</span> Share Text
+                </button>
+            </div>
+            <div id="clip-list">
+                <!-- Clipboard items populated here -->
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        ⚡ <strong>WarpSync v2.0</strong> — Zero-Trust Peer-to-Peer Transfer • Local Wi-Fi Active • High Throughput Stream
+    </footer>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
