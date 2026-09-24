@@ -127,12 +127,24 @@ fn main() {
         },
 
         "start-work" => {
-            let duration_mins: Option<u64> = clean_args.get(1).and_then(|s| s.parse().ok());
-            let duration_secs = duration_mins.map(|m| m * 60);
+            let duration_secs: Option<u64> = clean_args.get(1).and_then(|s| {
+                if s.ends_with('s') || s.ends_with('S') {
+                    s[..s.len() - 1].parse::<u64>().ok()
+                } else if s.ends_with('m') || s.ends_with('M') {
+                    s[..s.len() - 1].parse::<u64>().ok().map(|m| m * 60)
+                } else {
+                    s.parse::<u64>().ok().map(|m| m * 60)
+                }
+            });
+            let display_str = match duration_secs {
+                Some(secs) if secs % 60 == 0 => format!("{}m", secs / 60),
+                Some(secs) => format!("{}s", secs),
+                None => "30m".to_string(),
+            };
             match send_request(&mut stream, IpcRequest::StartWork { duration_secs }) {
                 Ok(IpcResponse::Ok) => println!(
-                    "Work phase started successfully ({}m)",
-                    duration_mins.unwrap_or(25)
+                    "Work phase started successfully ({})",
+                    display_str
                 ),
                 Ok(IpcResponse::Error { message }) => eprintln!("Error: {}", message),
                 Ok(other) => println!("Response: {:?}", other),
@@ -141,12 +153,24 @@ fn main() {
         }
 
         "start-break" => {
-            let duration_mins: Option<u64> = clean_args.get(1).and_then(|s| s.parse().ok());
-            let duration_secs = duration_mins.map(|m| m * 60);
+            let duration_secs: Option<u64> = clean_args.get(1).and_then(|s| {
+                if s.ends_with('s') || s.ends_with('S') {
+                    s[..s.len() - 1].parse::<u64>().ok()
+                } else if s.ends_with('m') || s.ends_with('M') {
+                    s[..s.len() - 1].parse::<u64>().ok().map(|m| m * 60)
+                } else {
+                    s.parse::<u64>().ok().map(|m| m * 60)
+                }
+            });
+            let display_str = match duration_secs {
+                Some(secs) if secs % 60 == 0 => format!("{}m", secs / 60),
+                Some(secs) => format!("{}s", secs),
+                None => "10m".to_string(),
+            };
             match send_request(&mut stream, IpcRequest::StartBreak { duration_secs }) {
                 Ok(IpcResponse::Ok) => println!(
-                    "Break phase started successfully ({}m)",
-                    duration_mins.unwrap_or(5)
+                    "Break phase started successfully ({})",
+                    display_str
                 ),
                 Ok(IpcResponse::Error { message }) => eprintln!("Error: {}", message),
                 Ok(other) => println!("Response: {:?}", other),
@@ -229,14 +253,14 @@ fn main() {
         "help" | "--help" | "-h" => {
             println!("Usage: pomodoro-cli [OPTIONS] <COMMAND>");
             println!("\nCommands:");
-            println!("  status              Query current Pomodoro status and grabbed devices");
-            println!("  start-work [MINS]   Start Pomodoro work phase (default: 25 mins)");
-            println!("  start-break [MINS]  Start Pomodoro break phase (default: 5 mins)");
-            println!("  lock                Directly acquire input lock on all target devices");
-            println!("  unlock              Release active input locks");
-            println!("  emergency-unlock    Out-of-band administrative override and release");
-            println!("  devices             List all classified input devices");
-            println!("  ping                Ping the privileged guard daemon");
+            println!("  status                 Query current Pomodoro status and grabbed devices");
+            println!("  start-work [DURATION]  Start Pomodoro work phase (e.g. 30, 30m, 120s; default: 30m)");
+            println!("  start-break [DURATION] Start Pomodoro break phase (e.g. 10, 10m, 60s; default: 10m)");
+            println!("  lock                   Directly acquire input lock on all target devices");
+            println!("  unlock                 Release active input locks");
+            println!("  emergency-unlock       Out-of-band administrative override and release");
+            println!("  devices                List all classified input devices");
+            println!("  ping                   Ping the privileged guard daemon");
             println!("\nOptions:");
             println!("  -s, --socket <PATH> Custom Unix socket path");
         }

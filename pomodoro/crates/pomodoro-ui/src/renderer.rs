@@ -215,12 +215,12 @@ impl BreakUiRenderer {
             }
         }
 
-        // Draw Header text "FOCUS (25m)"
+        // Draw Header text "FOCUS (30m)"
         draw_text_bitmap(
             buffer,
             width,
             height,
-            "FOCUS (25m)",
+            "FOCUS (30m)",
             (width.saturating_sub(11 * 8)) / 2,
             12,
             1,
@@ -250,8 +250,8 @@ impl BreakUiRenderer {
                 buffer,
                 width,
                 height,
-                "5m break auto-enforces",
-                (width.saturating_sub(22 * 8)) / 2,
+                "10m break auto-enforces",
+                (width.saturating_sub(23 * 8)) / 2,
                 height.saturating_sub(18),
                 1,
                 0xFF64748B,

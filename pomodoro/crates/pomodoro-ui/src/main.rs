@@ -106,8 +106,8 @@ impl PomodoroApp {
             windows: HashMap::new(),
             is_break_active: false,
             standalone_timer: Some(Instant::now()),
-            work_duration: Duration::from_secs(1500),
-            break_duration: Duration::from_secs(300),
+            work_duration: Duration::from_secs(1800),
+            break_duration: Duration::from_secs(600),
             saved_work_pos: None,
             last_rendered_key: None,
             force_redraw: true,
@@ -166,7 +166,7 @@ impl PomodoroApp {
                 (format!("{:02}:{:02}", mins, secs), true)
             }
         } else {
-            ("25:00".to_string(), false)
+            ("30:00".to_string(), false)
         }
     }
 

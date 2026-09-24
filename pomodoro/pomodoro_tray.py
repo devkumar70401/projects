@@ -101,11 +101,11 @@ class PomodoroNativeTray:
         self.menu.append(Gtk.SeparatorMenuItem())
 
         # 3. Actions
-        start_work_item = Gtk.MenuItem(label="🍅 Start Work (25m)")
+        start_work_item = Gtk.MenuItem(label="🍅 Start Work (30m)")
         start_work_item.connect("activate", lambda w: self.run_cmd(["work"]))
         self.menu.append(start_work_item)
 
-        start_break_item = Gtk.MenuItem(label="☕ Take Break (5m)")
+        start_break_item = Gtk.MenuItem(label="☕ Take Break (10m)")
         start_break_item.connect("activate", lambda w: self.run_cmd(["break"]))
         self.menu.append(start_break_item)
 
@@ -138,13 +138,13 @@ class PomodoroNativeTray:
         # Update Top Bar Icon and Label
         if self.state == "work":
             self.indicator.set_icon_full("alarm-symbolic", "Working")
-            self.indicator.set_label(f" {self.remaining_str}", "25:00")
+            self.indicator.set_label(f" {self.remaining_str}", "30:00")
         elif self.state == "break":
             self.indicator.set_icon_full("weather-clear-symbolic", "Break")
-            self.indicator.set_label(f" ☕ {self.remaining_str}", "05:00")
+            self.indicator.set_label(f" ☕ {self.remaining_str}", "10:00")
         else:
             self.indicator.set_icon_full("alarm-symbolic", "Idle")
-            self.indicator.set_label(" ⏸️", "25:00")
+            self.indicator.set_label(" ⏸️", "30:00")
 
         # Update menu label
         if hasattr(self, 'status_item'):

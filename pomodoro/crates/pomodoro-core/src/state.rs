@@ -2,8 +2,8 @@ use crate::time::MonotonicTime;
 use serde::{Deserialize, Serialize};
 use std::time::Duration;
 
-pub const DEFAULT_WORK_DURATION_SECS: u64 = 25 * 60; // 1500 seconds = 25 minutes
-pub const DEFAULT_BREAK_DURATION_SECS: u64 = 5 * 60; // 300 seconds = 5 minutes
+pub const DEFAULT_WORK_DURATION_SECS: u64 = 30 * 60; // 1800 seconds = 30 minutes
+pub const DEFAULT_BREAK_DURATION_SECS: u64 = 10 * 60; // 600 seconds = 10 minutes
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum LockStatus {
@@ -61,7 +61,7 @@ impl PomodoroState {
 
     pub fn formatted_remaining(&self, now: MonotonicTime) -> String {
         match self {
-            PomodoroState::Idle => "25:00".to_string(),
+            PomodoroState::Idle => "30:00".to_string(),
             PomodoroState::Working { deadline, .. } => {
                 MonotonicTime::format_remaining(now.remaining_until(*deadline))
             }
